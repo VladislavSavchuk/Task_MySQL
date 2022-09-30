@@ -165,3 +165,9 @@ ON Customers.CustomerID = Orders.CustomerID
 INNER JOIN Employees
 ON Orders.EmployeeID = Employees.EmployeeID
 WHERE Address = 'Ekergatan 24';
+
+23. Показать все продукты, содержащиеся в заказах 1997-го года и в названии которых менее 5 букв. В результате вывести OrderID, OrderDate, ProductName.
+
+24. Показать названия продуктов и их категорий, которые используются в заказах от заказчика по имени Blondel père et fils и категории которых состоят как минимум из 2-х слов.
+
+25. Вывести количество заказчиков (колонку назвать Buyers), которые заказали один из продуктов: «Queso Cabrales», «Gustaf's Knäckebröd», «Louisiana Fiery Hot Pepper Sauce», «Schoggi Schokolade», «Gnocchi di nonna Alice».
