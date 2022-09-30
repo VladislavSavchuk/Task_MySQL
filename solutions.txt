@@ -1,0 +1,166 @@
+1.Выбрать все строки из таблицы c перевозчиками.
+
+SELECT *
+FROM Shippers;
+
+2.Выбрать первые 3 строки из таблицы c сотрудниками.
+
+SELECT *
+FROM Employees
+LIMIT 3;
+
+3.Из таблицы сотрудников выбрать все имена, фамилии, дни рождения в следующем порядке: BirthDate, FirstName, LastName, количество строк в выборке ограничить 3-мя.
+
+SELECT BirthDate, FirstName, LastName
+FROM Employees
+LIMIT 3;
+
+4.Выбрать имена и фамлии сотрудников, родившихся в 1958 году.
+
+SELECT FirstName, LastName
+FROM Employees
+WHERE YEAR (BirthDate) = 1958;
+
+5.Выбрать все товары с ценой от 23 до 25.
+
+SELECT *
+FROM Products
+WHERE Price
+BETWEEN 23.00 AND 25.00;
+
+6.Найти товары с минимальной ценой.
+
+SELECT *
+FROM Products
+WHERE Price = ( SELECT MIN(Price) FROM Products);
+
+
+7.Найти товары с максимальной ценой.
+
+SELECT *
+FROM Products
+WHERE Price = ( SELECT MAX(Price) FROM Products);
+
+8.Выбрать все товары, у которых Unit '10 pkgs.'.
+
+SELECT *
+FROM Products
+WHERE Unit = '10 pkgs.';
+
+9.Выбрать адреса поставщиков, которые проживают в одном из городов: Tokyo, 
+Frankfurt, Osaka.
+SELECT Address 
+FROM voodoo.Suppliers
+WHERE City IN ('Tokyo', 'Frankfurt', 'Osaka');
+
+10.Выбрать название товаров начинающихся с буквы “G”, у которых цена больше 37.
+
+SELECT ProductName
+FROM Products
+WHERE ProductName
+LIKE 'G%' AND Price > '37';
+
+11.Вывести список стран начинающихся на S и состоящих из 5 букв, из которых есть поставщики.
+
+SELECT Country
+FROM Suppliers
+WHERE Country
+LIKE 'S%' AND LENGTH(Country) = '5';
+
+12.Вывести сумму всех товаров, в названии которых содержится ”od”, столбец назвать Summ
+
+SELECT Sum(Price)
+AS Summ
+FROM Products
+WHERE ProductName
+LIKE '%od%';
+
+13.Вывести среднюю стоимость товаров, поставляемых в бутылках, округлив до 2-х знаков после запятой, столбец назвать Summ
+
+SELECT ROUND(AVG(Price), 2)
+AS Summ
+FROM Products
+WHERE Unit LIKE '%bottle%';
+
+14.Найти количество клиентов, которые НЕ проживают в Франции и Германии,  столбец назвать Countt
+
+SELECT COUNT(*)
+AS Countt
+FROM Customers
+WHERE Country NOT IN ('France', 'Germany');
+
+15.Вывести имена сотрудников, родившихся после 01.01.1968 года. Отсортировать результат по имени.
+
+SELECT Firstname 
+FROM Employees
+WHERE Birthdate > '1968-01-01'
+ORDER BY Firstname;
+
+16.Выбрать названия товаров, у которых Price = 13 или 15 и отсортировать по возрастанию, использовать Select команды с объединением результатов через UNION.
+
+SELECT ProductName
+FROM Products
+WHERE Price = 13
+UNION
+SELECT ProductName
+FROM Products
+WHERE Price = 15
+ORDER BY ProductName;
+
+17.Показать имена товаров, в названии которых третяя буква m и названия их поставщиков.
+
+SELECT Products.ProductName, Suppliers.SupplierName
+FROM Products
+INNER JOIN Suppliers
+ON Products.SupplierID = Suppliers.SupplierID
+WHERE ProductName LIKE '__m%';
+
+18.Показать имена и фамилии сотрудника, который оформил заказ 1996-11-27 (написать запрос двумя способами: через INNER Join, и используя подзапрос).
+
+SELECT Employees.FirstName, Employees.LastName
+FROM Employees
+INNER JOIN Orders
+ON Employees.EmployeeID = Orders.EmployeeID
+WHERE OrderDate = '1996-11-27';
+
+SELECT Employees.FirstName, Employees.LastName
+FROM Employees, Orders
+WHERE Employees.EmployeeID = Orders.EmployeeID AND OrderDate = '1996-11-27';
+
+19.Выбрать все товары, у которых поставщик «Grandma Kelly's Homestead» и цена > 27. В результате вывести 3 колонки: Product, Supplier, Price.
+
+SELECT Products.ProductName, Suppliers.SupplierName, Products.Price
+FROM Products
+INNER JOIN Suppliers
+ON Products.SupplierID = Suppliers.SupplierID
+WHERE Price > '27' AND SupplierName = "Grandma Kelly's Homestead";
+
+20.Вывести суммарное количество продукта 'Queso Cabrales' (столбец обозвать Summ), отправленного всем покупателям.
+
+SELECT Sum(OrderDetails.Quantity)
+AS Summ
+FROM OrderDetails
+JOIN Products on OrderDetails.ProductId = Products.ProductId
+WHERE Products.ProductName ='Queso Cabrales';
+
+
+21.Показать все заказы, которые были отправлены по адресу «Ekergatan 24» с их заказчиками и сотрудниками. В результате вывести 3 колонки – ID заказа, имя заказчика, имя сотрудника, фамилия сотрудника.
+
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName
+FROM Customers
+INNER JOIN Orders
+ON Customers.CustomerID = Orders.CustomerID
+INNER JOIN Employees
+ON Orders.EmployeeID = Employees.EmployeeID
+WHERE Address = 'Ekergatan 24';
+
+22.Преобразовать предыдущий запрос таким образом, чтобы те же данные выводились в 3-х колонках – объединить LastName и FirstName из Employees в одну колонку через пробел и назвать ее EmployeeName (2 LEFT JOINS).
+
+SELECT Orders.OrderID, Customers.CustomerName, CONCAT(Employees.FirstName, ' ', Employees.LastName)
+AS EmployeeName
+FROM Customers
+INNER JOIN Orders
+ON Customers.CustomerID = Orders.CustomerID
+INNER JOIN Employees
+ON Orders.EmployeeID = Employees.EmployeeID
+WHERE Address = 'Ekergatan 24';
