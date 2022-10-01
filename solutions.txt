@@ -168,6 +168,35 @@ WHERE Address = 'Ekergatan 24';
 
 23. Показать все продукты, содержащиеся в заказах 1997-го года и в названии которых менее 5 букв. В результате вывести OrderID, OrderDate, ProductName.
 
+SELECT Orders.OrderId, Orders.OrderDate, Products.ProductName
+FROM Orders
+JOIN OrderDetails
+ON Orders.OrderId=OrderDetails.OrderId
+JOIN Products
+ON OrderDetails.ProductId=Products.ProductId
+WHERE Orders.OrderDate LIKE '1997%' AND Products.ProductName LIKE '____';
+
 24. Показать названия продуктов и их категорий, которые используются в заказах от заказчика по имени Blondel père et fils и категории которых состоят как минимум из 2-х слов.
 
+SELECT Categories.CategoryName, Products.Productname
+FROM Categories
+JOIN Products
+ON Categories.CategoryId=Products.CategoryId
+JOIN OrderDetails
+ON Products.ProductId=OrderDetails.ProductId
+JOIN Orders
+ON OrderDetails.OrderId=Orders.OrderId
+JOIN Customers
+ON Orders.CustomerId=Customers.CustomerId
+WHERE Customers.CustomerName='Blondel pere et fils' AND Categories.CategoryName LIKE '% %';
+
 25. Вывести количество заказчиков (колонку назвать Buyers), которые заказали один из продуктов: «Queso Cabrales», «Gustaf's Knäckebröd», «Louisiana Fiery Hot Pepper Sauce», «Schoggi Schokolade», «Gnocchi di nonna Alice».
+
+SELECT COUNT(*)
+AS Buyers
+FROM Orders
+JOIN OrderDetails
+ON Orders.OrderId=OrderDetails.OrderId
+JOIN Products
+ON OrderDetails.ProductId=Products.ProductId
+WHERE Products.ProductName='Queso Cabrales' OR Products.ProductName LIKE 'Gustaf%' OR Products.ProductName='Louisiana Fiery Hot Pepper Sauce' OR Products.ProductName='Schoggi Schokolade' OR Products.ProductName='Gnocchi di nonna Alice';
